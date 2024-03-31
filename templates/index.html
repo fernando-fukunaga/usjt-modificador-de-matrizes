@@ -37,9 +37,10 @@
                 <img src="{{ url_for("image", filename="imagem-padrao.jpg") }}" style="width: 55%; transform: translate(40%)">
             </div>
           </div>
+          <br>
           <!-- Formulário para upload de imagem -->
           <form enctype="multipart/form-data">
-            <input type="file" accept="image/jpeg" onchange="previewImage(event)">
+            <input type="file" accept="image/jpeg" onchange="previewImage(event)" style="transform: translate(40%)">
           </form>
         </div>
       </div>
