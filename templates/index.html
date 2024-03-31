@@ -26,15 +26,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <br><br><br>
-    <div class="container">
-      <div class="row justify-content-center">
+    <div class="container d-flex justify-content-center">
+      <div class="row">
         <div class="col-lg-8">
           <!-- Quadro retangular com tamanho fixo -->
           <div class="quadro">
             <!-- Div onde a imagem será exibida -->
             <div class="imagem">
               <!-- Aqui a imagem será carregada dinamicamente -->
-                <img src="{{ url_for("image", filename="imagem-padrao.jpg") }}" style="width: 55%; transform: translate(40%)">
+                <img src="{{ url_for("image", filename="imagem-padrao.jpg") }}" style="width: 55%; transform: translate(40%)" alt="imagem-padrao">
             </div>
           </div>
           <br>
