@@ -26,6 +26,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <br><br><br>
+    <h1 class="text-center fw-bold">MODIFICADOR DE MATRIZES</h1>
+    <h5 class="text-center">Faça o upload de uma imagem, escolha um efeito e um script Python irá modificar cada pixel dela para aplicá-lo</h5>
+    <br><br>
     <div class="container d-flex justify-content-center">
       <div class="row">
         <div class="col-lg-8">
@@ -37,13 +40,39 @@
                 <img src="{{ url_for("image", filename="imagem-padrao.jpg") }}" style="width: 55%; transform: translate(40%)" alt="imagem-padrao">
             </div>
           </div>
-          <br>
-          <!-- Formulário para upload de imagem -->
-          <form enctype="multipart/form-data">
-            <input type="file" accept="image/jpeg" onchange="previewImage(event)" style="transform: translate(40%)">
-          </form>
         </div>
       </div>
+    </div>
+
+    <br>
+
+    <div class="container d-flex justify-content-center">
+        <form action="{{ url_for("modify") }}" method="post" enctype="multipart/form-data">
+            {{ form.csrf_token() }}
+            <input type="file" accept="image/jpeg" onchange="previewImage(event)">
+            <br><br>
+            <select class="form-select" aria-label="Escolher efeito">
+              <option selected>Escolher efeito</option>
+              <option value="blackwhite">Preto e Branco</option>
+              <option value="red">Vermelho</option>
+              <option value="green">Verde</option>
+              <option value="blue">Azul</option>
+              <option value="inverted">RGB Invertido</option>
+            </select>
+            <br>
+            <div class="container d-flex justify-content-center">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+
+    <br><br>
+
+    <h2 class="text-center">Resultado:</h2>
+    <div class="container d-flex justify-content-center">
+        <div class="quadro">
+        <!-- Div onde a imagem será exibida -->
+        </div>
     </div>
 
     <script>
@@ -60,5 +89,6 @@
         }
       }
     </script>
+    <br><br><br><br>
 </body>
 </html>
