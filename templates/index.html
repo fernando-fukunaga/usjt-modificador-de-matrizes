@@ -49,30 +49,14 @@
     <div class="container d-flex justify-content-center">
         <form action="{{ url_for("modify") }}" method="post" enctype="multipart/form-data">
             {{ form.csrf_token() }}
-            <input type="file" accept="image/jpeg" onchange="previewImage(event)">
+            <input type="file" accept="image/jpeg" onchange="previewImage(event)" name="file">
             <br><br>
-            <select class="form-select" aria-label="Escolher efeito">
-              <option selected>Escolher efeito</option>
-              <option value="blackwhite">Preto e Branco</option>
-              <option value="red">Vermelho</option>
-              <option value="green">Verde</option>
-              <option value="blue">Azul</option>
-              <option value="inverted">RGB Invertido</option>
-            </select>
+            {{ form.effect(class="form-select") }}
             <br>
             <div class="container d-flex justify-content-center">
                 {{ form.submit(class="btn btn-primary") }}
             </div>
         </form>
-    </div>
-
-    <br><br>
-
-    <h2 class="text-center">Resultado:</h2>
-    <div class="container d-flex justify-content-center">
-        <div class="quadro">
-        <!-- Div onde a imagem será exibida -->
-        </div>
     </div>
 
     <script>
