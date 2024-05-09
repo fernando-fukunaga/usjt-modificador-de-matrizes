@@ -18,7 +18,11 @@ csrf = CSRFProtect(app)
 @app.route("/")
 def index():
     form = MainForm()
-    return render_template("index.html", form=form)
+    modified = request.args.get('modified', False)
+    base_file = request.args.get('base_file', "")
+    modified_file = request.args.get('modified_file', "")
+    return render_template("index.html", form=form, modified=modified,
+                           base_file=base_file, modified_file=modified_file)
 
 
 @app.route("/images/<filename>")
@@ -47,8 +51,11 @@ def modify():
     elif effect == "inverted":
         modify_to_inverted(image_to_modify, timestamp)
 
-    webbrowser.open_new_tab(f'http://localhost:5000/images/imagem-{timestamp}-modified.jpg')
-    return redirect(url_for("index"))
+    base_file = f'imagem-{timestamp}-base.jpg'
+    modified_file = f'imagem-{timestamp}-modified.jpg'
+
+    return redirect(url_for("index", modified=True, base_file=base_file,
+                            modified_file=modified_file))
 
 
 def modify_to_black_and_white(image, image_timestamp: float) -> None:

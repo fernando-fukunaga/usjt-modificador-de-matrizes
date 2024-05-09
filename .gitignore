@@ -281,4 +281,7 @@ pyrightconfig.json
 ### Pycharm ###
 .idea
 
+### This project ###
+/images/*
+
 # End of https://www.toptal.com/developers/gitignore/api/python,flask,visualstudiocode
