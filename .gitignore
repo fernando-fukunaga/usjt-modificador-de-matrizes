@@ -283,5 +283,6 @@ pyrightconfig.json
 
 ### This project ###
 /images/*
+!/images/imagem_padrao.jpg
 
 # End of https://www.toptal.com/developers/gitignore/api/python,flask,visualstudiocode
