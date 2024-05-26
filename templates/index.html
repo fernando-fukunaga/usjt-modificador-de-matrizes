@@ -55,8 +55,33 @@
             {{ form.csrf_token() }}
             <input type="file" accept="image/jpeg" onchange="previewImage(event)" name="file">
             <br><br>
+            <h6 style="text-align: center">Efeitos de cor</h6>
             {{ form.effect(class="form-select") }}
             <br>
+            <h6 style="text-align: center">Rotação</h6>
+            {{ form.rotation(class="form-select") }}
+            <br>
+            <h6 style="text-align: center">Translação</h6>
+            {{ form.translation(class="form-select") }}
+            {{ form.translation_pixels(class="form-control", placeholder="Quantos pixels mover?") }}
+            <br>
+            <h6 style="text-align: center">Escala</h6>
+            {{ form.scale(class="form-select") }}
+            <br>
+            <h6 style="text-align: center">Efeitos adicionais</h6>
+            {{ form.edge_highlighting(class="form-check-input", id="edge_highlighting_check") }}
+            <label class="form-check-label" for="edge_highlighting_check">
+                Destacar Bordas
+            </label>
+            {{ form.mirroring(class="form-check-input", id="mirroring_check") }}
+            <label class="form-check-label" for="mirroring_check">
+                Espelhar
+            </label>
+            {{ form.homography(class="form-check-input", id="homography_check") }}
+            <label class="form-check-label" for="homography_check">
+                Homografia
+            </label>
+            <br><br>
             <div class="container d-flex justify-content-center">
                 {{ form.submit(class="btn btn-primary") }}
             </div>
