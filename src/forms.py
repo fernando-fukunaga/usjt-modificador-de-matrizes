@@ -31,5 +31,5 @@ class MainForm(FlaskForm):
                                                 ("200_percent", "200%")])
     edge_highlighting = BooleanField(label="edge_highlighting")
     mirroring = BooleanField(label="mirroring")
-    homography = BooleanField(label="homography")
+    histogram = BooleanField(label="histogram")
     submit = SubmitField("Modificar")
