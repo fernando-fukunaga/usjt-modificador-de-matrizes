@@ -66,7 +66,11 @@ def modify():
     elif rotation == "no_rotation":
         pass
 
-    translate_up(image_being_modified, timestamp, translation_pixels)
+    translate(image_being_modified, timestamp, translation, translation_pixels)
+    image_being_modified = cv2.imread(f'{images_path}/imagem-{timestamp}-modified.jpg')
+
+    change_scale(image_being_modified, timestamp, scale)
+    image_being_modified = cv2.imread(f'{images_path}/imagem-{timestamp}-modified.jpg')
 
     base_file = f'imagem-{timestamp}-base.jpg'
     modified_file = f'imagem-{timestamp}-modified.jpg'
@@ -137,19 +141,66 @@ def rotate_270_degrees(image, image_timestamp: float) -> None:
     cv2.imwrite(f'{IMAGES_PATH}/imagem-{image_timestamp}-modified.jpg', rotated_image)
 
 
-def translate_up(image, image_timestamp: float, pixels: int) -> None:
+def translate(image, image_timestamp: float, direction: str, pixels: int) -> None:
     # Obtém a altura e largura da imagem
     height, width = image.shape[:2]
 
     # Cria uma nova imagem preenchida com zeros (preta)
     translated_image = np.zeros_like(image)
 
-    # Calcula a nova posição dos pixels após a translação para cima
-    for y in range(pixels, height):
-        for x in range(width):
-            translated_image[y - pixels, x] = image[y, x]
+    if direction == "up":
+        for y in range(pixels, height):
+            for x in range(width):
+                translated_image[y - pixels, x] = image[y, x]
+    elif direction == "down":
+        for y in range(height - pixels):
+            for x in range(width):
+                translated_image[y + pixels, x] = image[y, x]
+    elif direction == "left":
+        for y in range(height):
+            for x in range(pixels, width):
+                translated_image[y, x - pixels] = image[y, x]
+    elif direction == "right":
+        for y in range(height):
+            for x in range(width - pixels):
+                translated_image[y, x + pixels] = image[y, x]
 
     cv2.imwrite(f'{IMAGES_PATH}/imagem-{image_timestamp}-modified.jpg', translated_image)
+
+
+def change_scale(image, image_timestamp: float, percentage: str) -> None:
+    # Obtém a altura e largura da imagem
+    height, width = image.shape[:2]
+
+    if percentage == "100_percent":
+        scale_percent = 100
+    elif percentage == "25_percent":
+        scale_percent = 25
+    elif percentage == "50_percent":
+        scale_percent = 50
+    elif percentage == "75_percent":
+        scale_percent = 75
+    elif percentage == "150_percent":
+        scale_percent = 150
+    elif percentage == "200_percent":
+        scale_percent = 200
+
+    # Calcula as novas dimensões da imagem
+    new_width = int(width * scale_percent / 100)
+    new_height = int(height * scale_percent / 100)
+
+    # Cria uma nova imagem com as novas dimensões
+    resized_image = np.zeros((new_height, new_width, 3), dtype=np.uint8)
+
+    # Escala a imagem manualmente
+    for y in range(new_height):
+        for x in range(new_width):
+            orig_x = int(x / (scale_percent / 100))
+            orig_y = int(y / (scale_percent / 100))
+            if orig_x < width and orig_y < height:
+                resized_image[y, x] = image[orig_y, orig_x]
+
+    cv2.imwrite(f'{IMAGES_PATH}/imagem-{image_timestamp}-modified.jpg', resized_image)
 
 
 if __name__ == "__main__":

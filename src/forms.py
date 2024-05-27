@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import SelectField, SubmitField, FileField, IntegerField, BooleanField
-from wtforms.validators import InputRequired
+from wtforms.validators import InputRequired, NumberRange
 
 
 class MainForm(FlaskForm):
@@ -20,7 +20,9 @@ class MainForm(FlaskForm):
                                                             ("down", "Para baixo"),
                                                             ("left", "Para esquerda"),
                                                             ("right", "Para direita")])
-    translation_pixels = IntegerField(label="translationpixels", validators=[InputRequired()])
+    translation_pixels = IntegerField(label="translation_pixels",
+                                      validators=[InputRequired(),
+                                                  NumberRange(min=0, message="Apenas números positivos")])
     scale = SelectField(label="scale", choices=[("100_percent", "100% (não alterar)"),
                                                 ("25_percent", "25%"),
                                                 ("50_percent", "50%"),
