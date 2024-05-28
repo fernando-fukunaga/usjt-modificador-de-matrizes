@@ -62,16 +62,16 @@
             {{ form.rotation(class="form-select") }}
             <br>
             <h6 style="text-align: center">Translação</h6>
-            {{ form.translation(class="form-select") }}
+            {{ form.translation_direction(class="form-select") }}
             {{ form.translation_pixels(class="form-control", placeholder="Quantos pixels mover?") }}
             <br>
             <h6 style="text-align: center">Escala</h6>
             {{ form.scale(class="form-select") }}
             <br>
-            <h6 style="text-align: center">Efeitos adicionais</h6>
-            {{ form.edge_highlighting(class="form-check-input", id="edge_highlighting_check") }}
-            <label class="form-check-label" for="edge_highlighting_check">
-                Destacar Bordas
+            <h6 style="text-align: center">Efeitos adicionais:</h6>
+            {{ form.sobel_filter(class="form-check-input", id="sobel_filter_check") }}
+            <label class="form-check-label" for="sobel_filter_check">
+                Filtro de Sobel (destacar bordas)
             </label>
             {{ form.mirroring(class="form-check-input", id="mirroring_check") }}
             <label class="form-check-label" for="mirroring_check">

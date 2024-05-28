@@ -16,7 +16,7 @@ class MainForm(FlaskForm):
                                                       ("90_degrees", "90 graus"),
                                                       ("180_degrees", "180 graus"),
                                                       ("270_degrees", "270 graus")])
-    translation = SelectField(label="translation", choices=[("up", "Para cima"),
+    translation_direction = SelectField(label="translation_direction", choices=[("up", "Para cima"),
                                                             ("down", "Para baixo"),
                                                             ("left", "Para esquerda"),
                                                             ("right", "Para direita")])
@@ -29,7 +29,7 @@ class MainForm(FlaskForm):
                                                 ("75_percent", "75%"),
                                                 ("150_percent", "150%"),
                                                 ("200_percent", "200%")])
-    edge_highlighting = BooleanField(label="edge_highlighting")
+    sobel_filter = BooleanField(label="sobel_filter")
     mirroring = BooleanField(label="mirroring")
     histogram = BooleanField(label="histogram")
     submit = SubmitField("Modificar")

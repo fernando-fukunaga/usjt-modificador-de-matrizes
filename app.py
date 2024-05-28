@@ -37,10 +37,10 @@ def modify():
     form = MainForm(request.form)
     effect = form.effect.data
     rotation = form.rotation.data
-    translation = form.translation.data
+    translation_direction = form.translation_direction.data
     translation_pixels = form.translation_pixels.data
     scale = form.scale.data
-    edge_highlighting = form.edge_highlighting.data
+    sobel_filter = form.sobel_filter.data
     mirroring = form.mirroring.data
     histogram = form.histogram.data
     image = request.files["file"]
@@ -67,23 +67,27 @@ def modify():
     elif rotation == "no_rotation":
         pass
 
-    translate(image_being_modified, timestamp, translation, translation_pixels)
+    translate(image_being_modified, timestamp, translation_direction, translation_pixels)
     image_being_modified = cv2.imread(f'{images_path}/imagem-{timestamp}-modified.jpg')
 
     change_scale(image_being_modified, timestamp, scale)
     image_being_modified = cv2.imread(f'{images_path}/imagem-{timestamp}-modified.jpg')
 
-    if edge_highlighting:
-        highlight_edges(image_being_modified, timestamp)
+    if sobel_filter:
+        apply_sobel_filter(image_being_modified, timestamp)
         image_being_modified = cv2.imread(f'{images_path}/imagem-{timestamp}-modified.jpg')
 
     if mirroring:
-        mirror(image_being_modified, timestamp)
+        apply_mirroring(image_being_modified, timestamp)
         image_being_modified = cv2.imread(f'{images_path}/imagem-{timestamp}-modified.jpg')
 
     if histogram:
-        make_histogram(image_being_modified, timestamp)
-        webbrowser.open_new_tab("{0}/images/imagem-{1}-histogram.jpg".format(url_for("index"), timestamp))
+        if effect == "black_white":
+            make_black_white_histogram(image_being_modified, timestamp)
+            webbrowser.open_new_tab(f'http://localhost:5000/images/imagem-{timestamp}-histogram.jpg')
+        else:
+            make_color_histogram(image_being_modified, timestamp)
+            webbrowser.open_new_tab(f'http://localhost:5000/images/imagem-{timestamp}-histogram.jpg')
 
     base_file = f'imagem-{timestamp}-base.jpg'
     modified_file = f'imagem-{timestamp}-modified.jpg'
@@ -216,7 +220,7 @@ def change_scale(image, image_timestamp: float, percentage: str) -> None:
     cv2.imwrite(f'{IMAGES_PATH}/imagem-{image_timestamp}-modified.jpg', resized_image)
 
 
-def highlight_edges(image, image_timestamp: float) -> None:
+def apply_sobel_filter(image, image_timestamp: float) -> None:
     # Define os kernels de Sobel para a detecção de bordas
     sobel_x = np.array([[-1, 0, 1],
                         [-2, 0, 2],
@@ -245,7 +249,7 @@ def highlight_edges(image, image_timestamp: float) -> None:
     cv2.imwrite(f'{IMAGES_PATH}/imagem-{image_timestamp}-modified.jpg', edge_image)
 
 
-def mirror(image, image_timestamp) -> None:
+def apply_mirroring(image, image_timestamp) -> None:
     # Obtém a altura e largura da imagem
     height, width = image.shape[:2]
 
@@ -257,10 +261,10 @@ def mirror(image, image_timestamp) -> None:
         for x in range(width):
             mirrored_image[y, width - x - 1] = image[y, x]
 
-    cv2.imwrite(f'{IMAGES_PATH}/imagem-{image_timestamp}-modified.jpg', mirrored_image )
+    cv2.imwrite(f'{IMAGES_PATH}/imagem-{image_timestamp}-modified.jpg', mirrored_image)
 
 
-def make_histogram(image, image_timestamp) -> None:
+def make_color_histogram(image, image_timestamp) -> None:
     # Obtém a altura e largura da imagem
     height, width = image.shape[:2]
 
@@ -284,6 +288,31 @@ def make_histogram(image, image_timestamp) -> None:
         plt.plot(hist_channels[:, i], color=color, label=f'Canal {color.upper()}')
     plt.legend()
     plt.xlim([0, 256])
+
+    plt.savefig(f'{IMAGES_PATH}/imagem-{image_timestamp}-histogram.jpg')
+
+
+def make_black_white_histogram(image, image_timestamp) -> None:
+    # Obtém a altura e largura da imagem
+    height, width = image.shape[:2]
+
+    """Calcula o histograma de uma imagem em preto e branco."""
+    hist = np.zeros(256, dtype=int)
+
+    # Contar a frequência de cada intensidade de pixel
+    for y in range(height):
+        for x in range(width):
+            pixel_value = image[y, x]
+            hist[pixel_value] += 1
+
+    """Plota e salva o histograma."""
+    plt.figure()
+    plt.title("Histograma da Imagem em Preto e Branco")
+    plt.xlabel("Intensidade de Pixel")
+    plt.ylabel("Número de Pixels")
+    plt.plot(hist, color='black')
+    plt.xlim([0, 255])
+    plt.ylim([0, hist.max() * 1.1])  # Ajuste do limite y para melhor visualização
 
     plt.savefig(f'{IMAGES_PATH}/imagem-{image_timestamp}-histogram.jpg')
 
